@@ -1,0 +1,4 @@
+spring.application.name=joblisting
+spring.data.mongodb.uri=<mongodb_uri>
+spring.data.mongodb.database=<mongodb_name>
+

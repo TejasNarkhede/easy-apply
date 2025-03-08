@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.stereotype.Repository;
 import com.mongodb.client.AggregateIterable;
@@ -14,6 +15,9 @@ import com.tejas.joblisting.models.Post;
 
 @Repository
 public class SearchRepositoryImpl implements SearchRepository {
+
+        @Value("${MONGODB_DB_NAME}")
+        private String databaseName;
 
         private final MongoClient client;
         private final MongoConverter converter;
@@ -26,8 +30,8 @@ public class SearchRepositoryImpl implements SearchRepository {
         @Override
         public List<Post> findByKeywords(String keywords) {
                 final List<Post> posts = new ArrayList<>();
-                // Env Config
-                String databaseName = System.getenv("MONGODB_DB_NAME");
+                // // Env Config
+                // String databaseName = System.getenv("MONGODB_DB_NAME");
                 if (databaseName == null || databaseName.isEmpty()) {
                         throw new IllegalStateException("Environment variable MONGODB_DB_NAME is not set or is empty");
                 }
@@ -37,7 +41,8 @@ public class SearchRepositoryImpl implements SearchRepository {
                 AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$search",
                                 new Document("text",
                                                 new Document("query", keywords)
-                                                                .append("path", Arrays.asList("profile","techs", "desc",
+                                                                .append("path", Arrays.asList("profile", "techs",
+                                                                                "desc",
                                                                                 "exp")))),
                                 new Document("$limit", 10L)));
 

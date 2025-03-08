@@ -6,6 +6,4 @@ import com.tejas.joblisting.models.Post;
 
 @Repository
 public interface PostRepository extends MongoRepository<Post, String>, SearchRepository {
-
-
 }
